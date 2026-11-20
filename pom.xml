@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ejemplo</groupId>
+  <artifactId>gestion-tareas</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <!-- Jakarta Servlet API (provided: Tomcat la provee) -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- JSTL -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+  </dependencies>
+
+  <!--
+    Estructura plana: todos los archivos fuente viven en la raiz del
+    repositorio (sin src/main/java ni src/main/webapp). Maven se configura
+    para compilar los .java desde la raiz y para armar el WAR con la
+    estructura estandar que Tomcat espera:
+      index.jsp            -> /index.jsp
+      web.xml              -> /WEB-INF/web.xml
+      tareas.jsp           -> /WEB-INF/views/tareas.jsp
+      detalle.jsp          -> /WEB-INF/views/detalle.jsp
+      estilos.css          -> /css/estilos.css
+  -->
+  <build>
+    <finalName>gestion-tareas</finalName>
+    <sourceDirectory>${project.basedir}</sourceDirectory>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <includes>
+            <include>*.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.4.0</version>
+        <configuration>
+          <warSourceDirectory>${project.basedir}</warSourceDirectory>
+          <warSourceIncludes>index.jsp</warSourceIncludes>
+          <webXml>${project.basedir}/web.xml</webXml>
+          <webResources>
+            <resource>
+              <directory>${project.basedir}</directory>
+              <targetPath>WEB-INF/views</targetPath>
+              <includes>
+                <include>tareas.jsp</include>
+                <include>detalle.jsp</include>
+              </includes>
+            </resource>
+            <resource>
+              <directory>${project.basedir}</directory>
+              <targetPath>css</targetPath>
+              <includes>
+                <include>estilos.css</include>
+              </includes>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
